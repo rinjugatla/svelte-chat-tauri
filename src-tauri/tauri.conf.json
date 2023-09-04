@@ -55,12 +55,34 @@
     },
     "windows": [
       {
+        "label": "chat",
         "fullscreen": false,
         "height": 600,
         "resizable": true,
         "title": "tauri-svelte-chat",
-        "width": 800
+        "width": 300
+      },
+      {
+        "label": "meet",
+        "height": 600,
+        "resizable": true,
+        "title": "google meet",
+        "width": 800,
+        "url": "https://apps.google.com/intl/ja/meet/"
+      },
+      {
+        "label": "chat-screen",
+        "height": 600,
+        "resizable": true,
+        "title": "chat screen",
+        "width": 800,
+        "url": "http://localhost:5173/chatscreen"
       }
-    ]
+    ],
+    "systemTray": {
+      "iconPath": "icons/icon.png",
+      "iconAsTemplate": true,
+      "menuOnLeftClick": true
+    }
   }
 }
