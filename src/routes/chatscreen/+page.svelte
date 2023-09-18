@@ -3,11 +3,10 @@
 	import { onDestroy, onMount } from 'svelte';
 
 	let unlisten: any;
-	let recieve_chats: string[] = [];
+	let recieve_chats: {message: string, time: string}[] = [];
 	onMount(async () => {
-		unlisten = await listen('recieve_chat', (event: {payload: string}) => {
-			recieve_chats.push(event.payload);
-			recieve_chats = recieve_chats
+		unlisten = await listen('recieve_chat', (event: any) => {
+			recieve_chats = event.payload;
 		});
 	});
 
@@ -21,7 +20,8 @@
 <div>
 	{#each recieve_chats as chat}
 		 <div>
-			{chat}
+			<p>{chat.message}</p> 
+			<p>{chat.time}</p>
 		 </div>
 	{/each}
 </div>

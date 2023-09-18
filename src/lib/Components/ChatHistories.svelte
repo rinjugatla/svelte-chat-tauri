@@ -1,4 +1,5 @@
 <script>
+	import { invoke } from '@tauri-apps/api';
 	import { onDestroy, onMount } from 'svelte';
 	import { onSnapshotChats } from '$lib/api';
 	import { SnapshotChats } from '$lib/store';
@@ -17,6 +18,10 @@
 	 * @type {Array.<{message: string, time: string}>}
 	 */
 	let chats = [];
+	$: { 
+		console.log(chats);
+		invoke("send_chat_to_screen", {payload: chats}); 
+	}
 	onMount(async () => {
 		try {
 			unsubscribeFirestore = onSnapshotChats(roomId);

@@ -3,15 +3,16 @@
 
 use tauri::Manager;
 
-#[tauri::command]
-fn send_chat_to_screen(app: tauri::AppHandle, message: String) {
-    let chat_screen_window = app.get_window("chat-screen").unwrap();
-    chat_screen_window.emit("recieve_chat", message).unwrap();
+#[derive(Clone, serde::Serialize, serde::Deserialize)]
+struct Chat {
+  message: String,
+  time: String
 }
 
-#[derive(Clone, serde::Serialize)]
-struct Payload {
-  message: String,
+#[tauri::command]
+  fn send_chat_to_screen(app: tauri::AppHandle, payload: Vec<Chat>) {
+    let chat_screen_window = app.get_window("chat-screen").unwrap();
+    chat_screen_window.emit("recieve_chat", payload).unwrap();
 }
 
 // const SIZE: tauri::Size = tauri::Size::Physical(tauri::PhysicalSize{width: 256, height: 256});
