@@ -114,12 +114,13 @@ export const onSnapshotChats = (roomId = '') => {
         orderBy('created_at', 'desc'));
 	const unsubscribe = onSnapshot(q, (querySnapshot) => {
         /**
-         * @type {Array.<{message: string, time: string}>}
+         * @type {Array.<{id: string, message: string, time: string}>}
          */
         let chats = [];
 		querySnapshot.forEach((doc) => {
             const data = doc.data();
-			chats.push({message: data.message, time: data.created_at});
+			console.log(data);
+			chats.push({id: doc.id, message: data.message, time: data.created_at});
 		});
         SnapshotChats.set(chats);
 	});

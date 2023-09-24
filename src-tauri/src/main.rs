@@ -5,6 +5,7 @@ use tauri::Manager;
 
 #[derive(Clone, serde::Serialize, serde::Deserialize)]
 struct Chat {
+  id: String,
   message: String,
   time: String
 }

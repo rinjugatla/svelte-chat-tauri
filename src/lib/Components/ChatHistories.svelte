@@ -15,7 +15,7 @@
 	 */
 	let unsubscribeFirestore;
 	/**
-	 * @type {Array.<{message: string, time: string}>}
+	 * @type {Array.<{id: string, message: string, time: string}>}
 	 */
 	let chats = [];
 	$: { 
