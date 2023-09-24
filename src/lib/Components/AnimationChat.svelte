@@ -14,7 +14,8 @@
 	const cssFontSize = `${fontSize}px`;
 </script>
 
-<div class="niconico" style="--my-top: {cssTop}; --my-animation: {cssAnimation}; --my-color: {cssColor}; --my-font-size: {cssFontSize};">
+<div class="niconico" 
+	 style="--my-top: {cssTop}; --my-animation: {cssAnimation}; --my-color: {cssColor}; --my-font-size: {cssFontSize};" >
 	{message}
 </div>
 

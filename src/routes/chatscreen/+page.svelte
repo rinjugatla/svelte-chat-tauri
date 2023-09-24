@@ -50,16 +50,10 @@
 	});
 </script>
 
-{#each recieve_chats as chat}
-	{#if chat.id in animated_chats}
+{#each recieve_chats as chat (chat.id)}
 	<AnimationChat top={generateRandom(5, 95)} 
 	animationSpeed={generateRandom(1, 10)} 
 	color={generateRandomColor()} 
 	fontSize={generateRandom(10, 20)} 
 	message={chat.message} />
-	{:else}
-		<div>
-			
-		</div> 
-	{/if}
 {/each}
