@@ -1,13 +1,11 @@
-<script>
+<script lang="ts" type="module">
 	import { DarkMode } from 'flowbite-svelte';
 	import { Navbar, NavBrand, Button } from 'flowbite-svelte';
 	import { signInWithGoogle, signOutWithGoogle } from '$lib/firebase';
 	import { UserId } from '$lib/store';
 	import { onDestroy } from 'svelte';
-	/**
-	 * @type {string}
-	 */
-	let uid;
+
+	let uid: string;
 	const unsubscribe = UserId.subscribe((id) => {
 		uid = id;
 	});

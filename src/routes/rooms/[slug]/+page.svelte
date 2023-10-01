@@ -1,12 +1,13 @@
-<script>
+<script lang="ts">
+    import type {PageData} from './$types';
+
     import { onMount } from 'svelte';
 	import { existRoomById } from '$lib/api';
 
     import ChatHistories from '$lib/Components/ChatHistories.svelte';
 	import ChatInput from '$lib/Components/ChatInput.svelte';
 
-    /** @type {import('./$types').PageData} */
-    export let data;
+    export let data: PageData;
     // 部屋名
     const roomId = data.roomId;
     let isValidRoom = false;

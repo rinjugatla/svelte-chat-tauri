@@ -1,11 +1,8 @@
-<script>
+<script lang="ts">
 	import { Toast } from 'flowbite-svelte';
 	import dayjs from 'dayjs';
 
-	/**
-	 * @type {{message: string, time: string}}
-	 */
-	export let chat;
+	export let chat: {message: string, time: string};
 </script>
 
 <Toast

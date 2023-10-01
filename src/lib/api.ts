@@ -6,7 +6,7 @@ import { SnapshotChats } from './store';
 
 /**
  * 部屋IDを取得
- * @param {string} name 部屋名
+ * @param name 部屋名
  */
 const getRoomIdByName = async (name = '') => {
 	try {
@@ -18,10 +18,7 @@ const getRoomIdByName = async (name = '') => {
 		const exists = querySnapshot.size > 0;
 		if (!exists) { return null; }
 
-		/**
-		 * @type {string[]}
-		 */
-		let ids = [];
+		const ids: string[] = [];
 		querySnapshot.forEach((doc) => {
 			ids.push(doc.id);
 		});
@@ -33,8 +30,7 @@ const getRoomIdByName = async (name = '') => {
 
 /**
  * 部屋が存在するか
- * @param {string} id 部屋ID
- * @returns 
+ * @param id 部屋ID
  */
 export const existRoomById = async(id = '') => {
 	try{
@@ -51,7 +47,7 @@ export const existRoomById = async(id = '') => {
 
 /**
  * 部屋を登録
- * @param {string} name 作成する部屋名
+ * @param name 作成する部屋名
  * @returns 部屋ID
  */
 export const postRoom = async (name = '') => {
@@ -80,8 +76,8 @@ export const postRoom = async (name = '') => {
 
 /**
  * チャットを登録
- * @param roomId string 部屋ID
- * @param message string メッセージ 
+ * @param roomId 部屋ID
+ * @param message メッセージ 
  * @returns チャットID
  */
 export const postMessage = async (roomId = '', message = '') => {
@@ -105,7 +101,7 @@ export const postMessage = async (roomId = '', message = '') => {
 
 /**
  * チャット履歴をリアルタイムに取得
- * @param roomId string 部屋ID
+ * @param roomId 部屋ID
  * @returns 履歴取得停止
  */
 export const onSnapshotChats = (roomId = '') => {
@@ -113,10 +109,7 @@ export const onSnapshotChats = (roomId = '') => {
         collection(db, 'rooms', roomId, 'chats'),
         orderBy('created_at', 'desc'));
 	const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        /**
-         * @type {Array.<{id: string, message: string, time: string}>}
-         */
-        let chats = [];
+        const chats: {id: string, message: string, time: string}[] = [];
 		querySnapshot.forEach((doc) => {
             const data = doc.data();
 			console.log(data);

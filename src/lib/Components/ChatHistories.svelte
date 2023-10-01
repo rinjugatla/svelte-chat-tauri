@@ -1,4 +1,7 @@
-<script>
+<script lang="ts">
+	import type {Unsubscriber} from 'svelte/store';
+	import type {Unsubscribe} from 'firebase/firestore';
+
 	import { invoke } from '@tauri-apps/api';
 	import { onDestroy, onMount } from 'svelte';
 	import { onSnapshotChats } from '$lib/api';
@@ -6,18 +9,9 @@
 	import ChatHistory from './ChatHistory.svelte';
 
 	export let roomId = '';
-	/**
-	 * @type {import('svelte/store').Unsubscriber}
-	 */
-	let unsubscribeStore;
-	/**
-	 * @type {import('firebase/firestore').Unsubscribe}
-	 */
-	let unsubscribeFirestore;
-	/**
-	 * @type {Array.<{id: string, message: string, time: string}>}
-	 */
-	let chats = [];
+	let unsubscribeStore: Unsubscriber;
+	let unsubscribeFirestore: Unsubscribe;
+	let chats: {id: string, message: string, time: string}[] = [];
 	$: { 
 		console.log(chats);
 		invoke("send_chat_to_screen", {payload: chats}); 

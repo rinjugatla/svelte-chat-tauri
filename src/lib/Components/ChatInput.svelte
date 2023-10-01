@@ -1,14 +1,11 @@
-<script>
+<script lang="ts" type="module">
     import { UserId } from '$lib/store';
 	import { onDestroy } from 'svelte';
     import { postMessage } from '$lib/api';
     import { ButtonGroup, InputAddon, Input, Button } from 'flowbite-svelte';
 
-    /**
-	 * @type {string}
-	 */
-	let uid;
-	const unsubscribe = UserId.subscribe((id) => {
+	let uid: string;
+	const unsubscribe = UserId.subscribe((id: string) => {
 		uid = id;
 	});
 	onDestroy(() => {
@@ -33,7 +30,7 @@
 		posting = false;
 	};
 
-	const submitByKey = async (/** @type {KeyboardEvent} */ event) => {
+	const submitByKey = async (event: KeyboardEvent) => {
 		const needSubmit = event.ctrlKey && event.key == 'Enter';
 		if(!needSubmit){ return; }
 		
