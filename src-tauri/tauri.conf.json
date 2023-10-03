@@ -68,14 +68,6 @@
         "resizable": true,
         "title": "tauri-svelte-chat",
         "width": 300
-      },
-      {
-        "label": "chat-screen",
-        "height": 600,
-        "resizable": true,
-        "title": "chat screen",
-        "width": 800,
-        "url": "http://localhost:5173/chatscreen"
       }
     ],
     "systemTray": {
