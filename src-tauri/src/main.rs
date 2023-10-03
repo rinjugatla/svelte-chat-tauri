@@ -169,7 +169,7 @@ fn main() {
             // };
             Ok(())
           })
-        .invoke_handler(tauri::generate_handler![create_meet_window, send_chat_to_screen,])
+        .invoke_handler(tauri::generate_handler![create_child_window, send_chat_to_screen,])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
