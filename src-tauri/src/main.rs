@@ -110,9 +110,18 @@ async fn create_chat_screen_window_async(_app: tauri::AppHandle) {
     .inner_size(
       _chat_screen_size.x,
       _chat_screen_size.y
-    );
+    ).transparent(true);
 
-  child.build().expect("faild to build window");
+  let window = child.build().expect("faild to build window");
+  let hwnd = window.hwnd().unwrap().0;
+  let hwnd = windows::Win32::Foundation::HWND(hwnd);
+  unsafe {
+    use windows::Win32::UI::WindowsAndMessaging::*;
+    let nindex = GWL_EXSTYLE;
+    let style = WS_EX_APPWINDOW | WS_EX_COMPOSITED | WS_EX_LAYERED | WS_EX_TRANSPARENT | WS_EX_TOPMOST;
+    let _pre_val = SetWindowLongA(hwnd, nindex, style.0 as i32);
+  };
+
   return ();
 }
 
