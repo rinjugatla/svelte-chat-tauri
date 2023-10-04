@@ -43,7 +43,7 @@ async fn create_meet_window_async(_app: AppHandle, room_id: String) {
     tauri::WindowUrl::External(room_url.parse().unwrap()))
     .title("meet")
     .decorations(true)
-    .resizable(false)
+    .resizable(true)
     .position(
       _position.x,
       _position.y,
@@ -101,6 +101,7 @@ async fn create_chat_screen_window_async(_app: tauri::AppHandle) {
     "chat-screen", 
     tauri::WindowUrl::External(screen_url.parse().unwrap()))
     .title("chat-screen")
+    .always_on_top(true)
     .decorations(false)
     .resizable(false)
     .position(
@@ -158,25 +159,35 @@ fn calc_chat_screen_position(_meet_window: tauri::Window) -> tauri::LogicalPosit
 fn main() {
     // here `"quit".to_string()` defines the menu item id, and the second parameter is the menu item label.
     tauri::Builder::default()
-        .setup(move |app|{
-            // サブウィンドのマウス処理を無効化
-            // use tauri::Manager;
-            // let window = app.get_window("chat-screen").unwrap();
-            // window.set_decorations(true).unwrap();
-            // // window.set_always_on_top(true).unwrap();
-            // // window.set_min_size(Some(SIZE)).unwrap();
-            // // window.set_size(SIZE).unwrap();
-            // window.center().unwrap();
-            // let hwnd = window.hwnd().unwrap().0;
-            // let _pre_val;
-            // let hwnd = windows::Win32::Foundation::HWND(hwnd);
-            // unsafe {
-            //   use windows::Win32::UI::WindowsAndMessaging::*;
-            //   let nindex = GWL_EXSTYLE;
-            //   let style = WS_EX_APPWINDOW | WS_EX_COMPOSITED | WS_EX_LAYERED | WS_EX_TRANSPARENT | WS_EX_TOPMOST;
-            //   _pre_val = SetWindowLongA(hwnd, nindex, style.0 as i32);
-            // };
+        .setup(move |_app|{
             Ok(())
+          })
+          .on_window_event(move |global_event| match global_event.event() {
+            tauri::WindowEvent::Moved(_position) => {
+              let is_meet_window = global_event.window().label() == "meet";
+              if !is_meet_window { return; }
+
+              // meetウィンドにchat_screenを追従させる
+              let _meet_window = global_event.window();
+              let _screen_position = calc_chat_screen_position(_meet_window.clone());
+              let _screen_window = global_event.window().app_handle().get_window("chat-screen").unwrap();
+              let _ = _screen_window.set_position(_screen_position);
+            }
+            tauri::WindowEvent::Resized(_size) => { 
+              let is_meet_window = global_event.window().label() == "meet";
+              if !is_meet_window { return; }
+
+              // meetウィンドにchat_screenを追従させる
+              let _meet_window = global_event.window();
+              let _screen_size = calc_chat_screen_size(_meet_window.clone());
+              let _screen_window = global_event.window().app_handle().get_window("chat-screen").unwrap();
+              let _ = _screen_window.set_size(tauri::Size::Physical(tauri::PhysicalSize { width: _screen_size.x as u32, height: _screen_size.y as u32 }));
+             }
+            tauri::WindowEvent::Destroyed => {
+               let is_chat_window = global_event.window().label() == "chat";
+               if is_chat_window { std::process::exit(0x0); }
+            }
+            _ => (),
           })
         .invoke_handler(tauri::generate_handler![create_child_window, send_chat_to_screen,])
         .run(tauri::generate_context!())
