@@ -101,7 +101,7 @@ async fn create_chat_screen_window_async(_app: tauri::AppHandle) {
     "chat-screen", 
     tauri::WindowUrl::External(screen_url.parse().unwrap()))
     .title("chat-screen")
-    .always_on_top(false)
+    .owner_window(_meet_window.hwnd().unwrap())
     .decorations(false)
     .resizable(false)
     .skip_taskbar(true)
@@ -192,7 +192,6 @@ fn main() {
               if _is_screen_window { return; }
               
               let _window = _screen_window.unwrap();
-              let _ = _window.set_always_on_top(*_focused); 
 
               // 毎回設定しないとクリックの透過ができない
               let hwnd = _window.hwnd().unwrap().0;
