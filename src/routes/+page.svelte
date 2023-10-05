@@ -1,5 +1,9 @@
 <script>
+	import Header from '$lib/Common/Header.svelte';
 	import RoomInput from '$lib/Components/RoomInput.svelte';
 </script>
 
-<RoomInput />
+<Header />
+<div class="pt-16">
+	<RoomInput />
+</div>

@@ -3,8 +3,8 @@
 	import { emit, listen } from '@tauri-apps/api/event';
 	import { onDestroy, onMount } from 'svelte';
 
-	let container: Element;
-	let classDammy: Element;
+	// let container: Element;
+	// let classDammy: Element;
 
 	let unlisten: any;
 	let recieve_chats: {id: string, message: string, time: string}[] = [];
@@ -14,16 +14,16 @@
 		});
 	});
 
-	let animated_chats: {[id: string]: {message: string, time:string}} = {};
-	$: {
-		const need_animation_multi_chat = recieve_chats.length - Object.keys(animated_chats).length;
-		recieve_chats.forEach(chat => {
-			const hasId = chat.id in animated_chats;
-			if (hasId) { return; }
+	// let animated_chats: {[id: string]: {message: string, time:string}} = {};
+	// $: {
+	// 	const need_animation_multi_chat = recieve_chats.length - Object.keys(animated_chats).length;
+	// 	recieve_chats.forEach(chat => {
+	// 		const hasId = chat.id in animated_chats;
+	// 		if (hasId) { return; }
 
-			animated_chats[chat.id] = {message: chat.message, time: chat.time};
-		});
-	}
+	// 		animated_chats[chat.id] = {message: chat.message, time: chat.time};
+	// 	});
+	// }
 
 	function generateRandom(min: number, max: number): number {
 		const random = Math.floor( Math.random() * (max + 1 - min) ) + min;
@@ -50,10 +50,18 @@
 	});
 </script>
 
-{#each recieve_chats as chat (chat.id)}
-	<AnimationChat top={generateRandom(5, 95)} 
-	animationSpeed={generateRandom(1, 10)} 
-	color={generateRandomColor()} 
-	fontSize={generateRandom(10, 20)} 
-	message={chat.message} />
-{/each}
+<div>
+	{#each recieve_chats as chat (chat.id)}
+		<AnimationChat top={generateRandom(5, 95)} 
+		animationSpeed={generateRandom(1, 10)} 
+		color={generateRandomColor()} 
+		fontSize={generateRandom(10, 20)} 
+		message={chat.message} />
+	{/each}	
+</div>
+
+<style>
+	:global(:root) {
+		background-color: hsla(0, 0%, 100%, 0.01);
+    }
+</style>

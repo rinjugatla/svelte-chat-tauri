@@ -1,6 +1,8 @@
 <script lang="ts">
     import type {PageData} from './$types';
 
+    import Header from '$lib/Common/Header.svelte';
+
     import { onMount } from 'svelte';
 	import { existRoomById } from '$lib/api';
 
@@ -22,7 +24,10 @@
 	});
 </script>
 
-{#if isValidRoom}
+<Header />
+<div class="pt-16">
+    {#if isValidRoom}
     <ChatHistories {roomId} />
     <ChatInput {roomId} />
-{/if}
+    {/if}    
+</div>
