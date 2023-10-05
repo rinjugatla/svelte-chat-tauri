@@ -104,6 +104,7 @@ async fn create_chat_screen_window_async(_app: tauri::AppHandle) {
     .always_on_top(false)
     .decorations(false)
     .resizable(false)
+    .skip_taskbar(true)
     .position(
       _chat_screen_position.x,
       _chat_screen_position.y,
