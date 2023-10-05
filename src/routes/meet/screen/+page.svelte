@@ -39,9 +39,9 @@
 <div>
 	{#each recieve_chats as chat (chat.id)}
 		<AnimationChat top={generateRandom(5, 95)} 
-		animationSpeed={generateRandom(1, 10)} 
+		animationSpeed={generateRandom(3, 10)} 
 		color={generateRandomColor()} 
-		fontSize={generateRandom(10, 20)} 
+		fontSize={generateRandom(30, 50)} 
 		message={chat.message} />
 	{/each}	
 </div>
