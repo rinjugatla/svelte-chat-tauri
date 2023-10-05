@@ -101,7 +101,7 @@ async fn create_chat_screen_window_async(_app: tauri::AppHandle) {
     "chat-screen", 
     tauri::WindowUrl::External(screen_url.parse().unwrap()))
     .title("chat-screen")
-    .always_on_top(true)
+    .always_on_top(false)
     .decorations(false)
     .resizable(false)
     .position(
@@ -182,6 +182,26 @@ fn main() {
               let _screen_size = calc_chat_screen_size(_meet_window.clone());
               let _screen_window = global_event.window().app_handle().get_window("chat-screen").unwrap();
               let _ = _screen_window.set_size(tauri::Size::Physical(tauri::PhysicalSize { width: _screen_size.x as u32, height: _screen_size.y as u32 }));
+             }
+             tauri::WindowEvent::Focused(_focused) => {
+              let _screen_window = global_event.window().app_handle().get_window("chat-screen");
+              if _screen_window == None { return; }
+
+              let _is_screen_window = global_event.window().label() == "chat-screen";
+              if _is_screen_window { return; }
+              
+              let _window = _screen_window.unwrap();
+              let _ = _window.set_always_on_top(*_focused); 
+
+              // 毎回設定しないとクリックの透過ができない
+              let hwnd = _window.hwnd().unwrap().0;
+              let hwnd = windows::Win32::Foundation::HWND(hwnd);
+              unsafe {
+                use windows::Win32::UI::WindowsAndMessaging::*;
+                let nindex = GWL_EXSTYLE;
+                let style = WS_EX_APPWINDOW | WS_EX_COMPOSITED | WS_EX_LAYERED | WS_EX_TRANSPARENT | WS_EX_TOPMOST;
+                let _pre_val = SetWindowLongA(hwnd, nindex, style.0 as i32);
+              };
              }
             tauri::WindowEvent::Destroyed => {
                let is_chat_window = global_event.window().label() == "chat";
