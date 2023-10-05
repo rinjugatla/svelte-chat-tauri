@@ -1,6 +1,4 @@
 <script lang="ts">
-    import type {PageData} from './$types';
-
     import Header from '$lib/Common/Header.svelte';
 
     import { onMount } from 'svelte';
@@ -9,12 +7,14 @@
     import ChatHistories from '$lib/Components/ChatHistories.svelte';
 	import ChatInput from '$lib/Components/ChatInput.svelte';
 
-    export let data: PageData;
+    const urlParams = new URLSearchParams(window.location.search);
     // 部屋名
-    const roomId = data.roomId;
+    const roomId = urlParams.has("roomId") ? urlParams.get("roomId")! : "";
     let isValidRoom = false;
 
     onMount(async () => {
+        if(roomId == null) { document.location.href = '/'; }
+
         const exists = await existRoomById(roomId);
         isValidRoom = exists;
         if (exists){ return; }

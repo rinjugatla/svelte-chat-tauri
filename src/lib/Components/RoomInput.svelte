@@ -28,7 +28,7 @@
 			const room_firebase_id = await postRoom(meet_id);
 			if (room_firebase_id) {
 				invoke("create_child_window", {meet: {id: meet_id}});
-				document.location.href = `/rooms/${room_firebase_id}`;
+				document.location.href = `/room?roomId=${room_firebase_id}`;
 			} else {
 				alert('ルームの作成に失敗しました。');
 			}
