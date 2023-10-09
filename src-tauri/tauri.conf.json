@@ -67,7 +67,8 @@
         "height": 600,
         "resizable": true,
         "title": "tauri-svelte-chat",
-        "width": 300
+        "width": 300,
+        "url": "chat"
       }
     ],
     "systemTray": {

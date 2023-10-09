@@ -17,7 +17,7 @@
 <div class="fixed top-0 w-full z-10">
 	<Navbar>
 		<div>
-			<NavBrand class="flex" href="/">
+			<NavBrand class="flex" href="/chat">
 				<svg
 					class="w-6 h-6 text-gray-800 dark:text-white"
 					aria-hidden="true"

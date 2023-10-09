@@ -95,7 +95,7 @@ async fn create_chat_screen_window_async(_app: tauri::AppHandle) {
   let _chat_screen_position = calc_chat_screen_position(_meet_window.clone());
   let _chat_screen_size = calc_chat_screen_size(_meet_window.clone());
 
-  let screen_url = "http://localhost:5173/meet/screen";
+  let screen_url = "http://localhost:5173/screen";
   let child = window::WindowBuilder::new(
     &_app, 
     "chat-screen", 
