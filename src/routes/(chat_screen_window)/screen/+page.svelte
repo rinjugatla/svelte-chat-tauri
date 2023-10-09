@@ -45,9 +45,3 @@
 		message={chat.message} />
 	{/each}	
 </div>
-
-<style>
-	:global(:root) {
-		background-color: hsla(0, 0%, 100%, 0.01);
-    }
-</style>
