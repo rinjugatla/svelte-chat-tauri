@@ -19,15 +19,17 @@
 	const enterRoom = async () => {
 		try{
 			posting = true;
-			const isValidRommId = meet_id.match("[a-z]{3}-[a-z]{4}-[a-z]{3}");
-			if (!isValidRommId){ 
+			const roomIdPattern = "[a-z]{3}-[a-z]{4}-[a-z]{3}";
+			const matchResult = meet_id.match(roomIdPattern);
+			if (!matchResult){ 
 				alert('部屋IDの形式に誤りがあります。');
 				return; 
 			}
 
-			const room_firebase_id = await postRoom(meet_id);
+			const validRommId = matchResult[0];
+			const room_firebase_id = await postRoom(validRommId);
 			if (room_firebase_id) {
-				invoke("create_child_window", {meet: {id: meet_id}});
+				invoke("create_child_window", {meet: {id: validRommId}});
 				document.location.href = `/room?roomId=${room_firebase_id}`;
 			} else {
 				alert('ルームの作成に失敗しました。');
