@@ -1,7 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use tauri::{Manager, window, AppHandle};
+use tauri::{Manager, Window, WindowEvent, AppHandle, WindowUrl, LogicalPosition, WindowBuilder};
 
 #[derive(Clone, serde::Serialize, serde::Deserialize)]
 struct Chat {
@@ -16,13 +16,13 @@ struct Meet {
 }
 
 #[tauri::command]
-  fn send_chat_to_screen(app: tauri::AppHandle, payload: Vec<Chat>) {
+  fn send_chat_to_screen(app: AppHandle, payload: Vec<Chat>) {
     let chat_screen_window = app.get_window("chat-screen").unwrap();
     chat_screen_window.emit("recieve_chat", payload).unwrap();
 }
 
 #[tauri::command]
-async fn create_child_window(_app: tauri::AppHandle, meet: Meet) {
+async fn create_child_window(_app: AppHandle, meet: Meet) {
   create_meet_window_async(_app.clone(), meet.id).await;
   create_chat_screen_window_async(_app.clone()).await;
 }
@@ -37,10 +37,10 @@ async fn create_meet_window_async(_app: AppHandle, room_id: String) {
   let _size = calc_meet_size(_chat_window.clone());
 
   let room_url = format!("https://meet.google.com/{room_id}");
-  let child = window::WindowBuilder::new(
+  let child = WindowBuilder::new(
     &_app, 
     "meet", 
-    tauri::WindowUrl::External(room_url.parse().unwrap()))
+    WindowUrl::External(room_url.parse().unwrap()))
     .title("meet")
     .decorations(true)
     .resizable(true)
@@ -57,7 +57,7 @@ async fn create_meet_window_async(_app: AppHandle, room_id: String) {
   return ();
 }
 
-fn calc_meet_size(_chat_window: tauri::Window) -> tauri::LogicalPosition<f64> {
+fn calc_meet_size(_chat_window: Window) -> LogicalPosition<f64> {
   let scale_factor = _chat_window.scale_factor().unwrap();
 
   let _chat_window_phyiscal_size = _chat_window.outer_size().unwrap();
@@ -67,11 +67,11 @@ fn calc_meet_size(_chat_window: tauri::Window) -> tauri::LogicalPosition<f64> {
   let _meet_width = 1200.0;
   let _meet_height = _chat_window_size.height as f64 - _header_height;
 
-  let _size = tauri::LogicalPosition::new(_meet_width, _meet_height);
+  let _size = LogicalPosition::new(_meet_width, _meet_height);
   return  _size;
 }
 
-fn calc_meet_position(_chat_window: tauri::Window) -> tauri::LogicalPosition<f64> {
+fn calc_meet_position(_chat_window: Window) -> LogicalPosition<f64> {
   let scale_factor = _chat_window.scale_factor().unwrap();
 
   let _chat_window_phyiscal_pos = _chat_window.outer_position().unwrap();
@@ -82,12 +82,12 @@ fn calc_meet_position(_chat_window: tauri::Window) -> tauri::LogicalPosition<f64
   let _meet_pos_x = _chat_window_pos.x as f64 - _meet_width - 5.0;
   let _meet_pos_y = _chat_window_pos.y as f64;
 
-  let _size = tauri::LogicalPosition::new(_meet_pos_x, _meet_pos_y);
+  let _size = LogicalPosition::new(_meet_pos_x, _meet_pos_y);
   return  _size;
 }
 
 #[tauri::command]
-fn close_meet_window(_app: tauri::AppHandle) {
+fn close_meet_window(_app: AppHandle) {
   let _window = _app.get_window("meet");
   let _exists_window = _window.is_some();
   if !_exists_window { return ;}
@@ -96,7 +96,7 @@ fn close_meet_window(_app: tauri::AppHandle) {
 }
 
 #[tauri::command]
-async fn create_chat_screen_window_async(_app: tauri::AppHandle) {
+async fn create_chat_screen_window_async(_app: AppHandle) {
   let _exists_chat_screen_window = _app.get_window("chat-screen").is_some();
   if _exists_chat_screen_window { return (); }
 
@@ -105,10 +105,10 @@ async fn create_chat_screen_window_async(_app: tauri::AppHandle) {
   let _chat_screen_size = calc_chat_screen_size(_meet_window.clone());
 
   let screen_url = "http://localhost:5173/screen";
-  let child = window::WindowBuilder::new(
+  let child = WindowBuilder::new(
     &_app, 
     "chat-screen", 
-    tauri::WindowUrl::External(screen_url.parse().unwrap()))
+    WindowUrl::External(screen_url.parse().unwrap()))
     .title("chat-screen")
     .owner_window(_meet_window.hwnd().unwrap())
     .decorations(false)
@@ -136,7 +136,7 @@ async fn create_chat_screen_window_async(_app: tauri::AppHandle) {
   return ();
 }
 
-fn calc_chat_screen_size(_meet_window: tauri::Window) -> tauri::LogicalPosition<f64> {
+fn calc_chat_screen_size(_meet_window: Window) -> LogicalPosition<f64> {
   let _scale_factor = _meet_window.scale_factor().unwrap();
   let _meet_window_phyiscal_size = _meet_window.outer_size().unwrap();
   let _meet_window_size = _meet_window_phyiscal_size.to_logical::<i32>(_scale_factor);
@@ -146,11 +146,11 @@ fn calc_chat_screen_size(_meet_window: tauri::Window) -> tauri::LogicalPosition<
   let _chat_screen_width = _meet_window_size.width as f64 + _offset_width;
   let _chat_screen_height = _meet_window_size.height as f64 - _header_height;
 
-  let _size = tauri::LogicalPosition::new(_chat_screen_width, _chat_screen_height);
+  let _size = LogicalPosition::new(_chat_screen_width, _chat_screen_height);
   return _size;
 }
 
-fn calc_chat_screen_position(_meet_window: tauri::Window) -> tauri::LogicalPosition<f64> {
+fn calc_chat_screen_position(_meet_window: Window) -> LogicalPosition<f64> {
   let _scale_factor = _meet_window.scale_factor().unwrap();
   let _meet_window_phyiscal_pos = _meet_window.outer_position().unwrap();
   let _meet_window_pos = _meet_window_phyiscal_pos.to_logical::<i32>(_scale_factor);
@@ -161,7 +161,7 @@ fn calc_chat_screen_position(_meet_window: tauri::Window) -> tauri::LogicalPosit
   let _chat_screen_pos_x = _meet_window_pos.x as f64 + _decorations_offset_x;
   let _chat_screen_pos_y = _meet_window_pos.y as f64 + _header_height + _decorations_offset_y;  
 
-  let _position = tauri::LogicalPosition::new(_chat_screen_pos_x, _chat_screen_pos_y);
+  let _position = LogicalPosition::new(_chat_screen_pos_x, _chat_screen_pos_y);
   return  _position;
 }
 
@@ -173,7 +173,7 @@ fn main() {
             Ok(())
           })
           .on_window_event(move |global_event| match global_event.event() {
-            tauri::WindowEvent::Moved(_position) => {
+            WindowEvent::Moved(_position) => {
               let is_meet_window = global_event.window().label() == "meet";
               if !is_meet_window { return; }
 
@@ -183,7 +183,7 @@ fn main() {
               let _screen_window = global_event.window().app_handle().get_window("chat-screen").unwrap();
               let _ = _screen_window.set_position(_screen_position);
             }
-            tauri::WindowEvent::Resized(_size) => { 
+            WindowEvent::Resized(_size) => { 
               let is_meet_window = global_event.window().label() == "meet";
               if !is_meet_window { return; }
 
@@ -193,7 +193,7 @@ fn main() {
               let _screen_window = global_event.window().app_handle().get_window("chat-screen").unwrap();
               let _ = _screen_window.set_size(tauri::Size::Physical(tauri::PhysicalSize { width: _screen_size.x as u32, height: _screen_size.y as u32 }));
              }
-             tauri::WindowEvent::Focused(_focused) => {
+             WindowEvent::Focused(_focused) => {
               let _screen_window = global_event.window().app_handle().get_window("chat-screen");
               if _screen_window == None { return; }
 
@@ -212,7 +212,7 @@ fn main() {
                 let _pre_val = SetWindowLongA(hwnd, nindex, style.0 as i32);
               };
              }
-            tauri::WindowEvent::Destroyed => {
+            WindowEvent::Destroyed => {
                let is_chat_window = global_event.window().label() == "chat";
                if is_chat_window { std::process::exit(0x0); }
             }
