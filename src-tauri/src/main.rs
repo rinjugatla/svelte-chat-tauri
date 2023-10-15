@@ -87,6 +87,15 @@ fn calc_meet_position(_chat_window: tauri::Window) -> tauri::LogicalPosition<f64
 }
 
 #[tauri::command]
+fn close_meet_window(_app: tauri::AppHandle) {
+  let _window = _app.get_window("meet");
+  let _exists_window = _window.is_some();
+  if !_exists_window { return ;}
+
+  let _ = _window.unwrap().close();
+}
+
+#[tauri::command]
 async fn create_chat_screen_window_async(_app: tauri::AppHandle) {
   let _exists_chat_screen_window = _app.get_window("chat-screen").is_some();
   if _exists_chat_screen_window { return (); }
@@ -209,7 +218,7 @@ fn main() {
             }
             _ => (),
           })
-        .invoke_handler(tauri::generate_handler![create_child_window, send_chat_to_screen,])
+        .invoke_handler(tauri::generate_handler![create_child_window, send_chat_to_screen, close_meet_window,])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
