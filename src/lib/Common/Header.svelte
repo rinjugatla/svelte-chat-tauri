@@ -12,6 +12,11 @@
 	onDestroy(() => {
 		unsubscribe();
 	});
+
+	const logoutProcess = () => {
+		signOutWithGoogle();
+		document.location.href = `/chat`;
+	}
 </script>
 
 <div class="fixed top-0 w-full z-10">
@@ -41,9 +46,14 @@
 		<div class="flex justify-center items-center">
 			<div class="mr-2">
 				{#if uid}
-					<Button size="sm" color="alternative" on:click={signOutWithGoogle}>Logout</Button>
+					<Button 
+						size="sm" 
+						color="alternative" 
+						on:click={logoutProcess}>Logout</Button>
 				{:else}
-					<Button size="sm" on:click={signInWithGoogle}>Login</Button>
+					<Button 
+						size="sm" 
+						on:click={signInWithGoogle}>Login</Button>
 				{/if}
 			</div>
 			<DarkMode size="sm" />
