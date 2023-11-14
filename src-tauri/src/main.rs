@@ -104,7 +104,10 @@ async fn create_chat_screen_window_async(_app: AppHandle) {
   let _chat_screen_position = calc_chat_screen_position(_meet_window.clone());
   let _chat_screen_size = calc_chat_screen_size(_meet_window.clone());
 
-  let screen_url = "http://localhost:5173/screen";
+  // developとreleaseでURLが変わるので注意
+  // develop: http://localhost:5173
+  // release: tauri://localhost
+  let screen_url = "http://localhost:5173";
   let child = WindowBuilder::new(
     &_app, 
     "chat-screen", 
