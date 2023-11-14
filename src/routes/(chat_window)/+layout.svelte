@@ -6,13 +6,7 @@
 
 <main class="bg-white dark:bg-gray-400">
 	<Header />
-	<div class="pt-16 z-20">
+	<div class="pt-16 pb-4 z-20">
 		<slot />
 	</div>
 </main>
-
-<style>
-	main {
-		height: 100vh;
-	}
-</style>
